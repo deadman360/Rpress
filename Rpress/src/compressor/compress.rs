@@ -15,7 +15,7 @@ pub fn compress_file(input_file: &str) -> ZipResult<()>{
     let mut zip_writer = ZipWriter::new(zip_file);
 
     let options: zip::write::FileOptions<()> = FileOptions::default()
-        .compression_method(zip::CompressionMethod::Bzip2);
+        .compression_method(zip::CompressionMethod::Deflated);
     if cfg!(unix){
         let _ = options.unix_permissions(0o755);
     };
