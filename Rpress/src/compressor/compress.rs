@@ -15,14 +15,14 @@ pub fn compress_file(input_file: &str) -> ZipResult<()>{
     let mut zip_writer = ZipWriter::new(zip_file);
 
     let options: zip::write::FileOptions<()> = FileOptions::default()
-        .compression_method(zip::CompressionMethod::Deflated);
+        .compression_method(zip::CompressionMethod::Bzip2);
     if cfg!(unix){
-        options.unix_permissions(0o755);
+        let _ = options.unix_permissions(0o755);
     };
     let mut buffer = Vec::new();
     let mut arquivo = File::open(input_file)
         .expect("Nao foi possivel ler o arquivo para o zip");
-    arquivo.read_to_end(&mut buffer);
+    arquivo.read_to_end(&mut buffer).expect("falha ao ler o arquivo par o buffer");
 
         zip_writer.start_file(input_file, options).expect("Erro ao inicializar o ZIP");
     zip_writer.write_all(&buffer).expect("Erro ao escrever o arquivo no ZIP");
